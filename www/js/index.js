@@ -25,7 +25,7 @@ $(document).on("pageinit", "#list-page", function () {
 		dataType: 'json',
 		//autenticazione
 		beforeSend: function (request){
-		    request.setRequestHeader("X-ZUMO-APPLICATION", "StSYducBChrIUOPMmwwNYfgsqUYPhv11");
+			request.setRequestHeader("X-ZUMO-APPLICATION", "StSYducBChrIUOPMmwwNYfgsqUYPhv11");
 			request.setRequestHeader("Content-Type", "application/json");
 	    },
 	   
@@ -49,12 +49,10 @@ $(document).on("pageinit", "#list-page", function () {
 });
 
 var idNotizia;
-
 //Eventi click sulla notizia, apro il dettaglio
 $(document).on('vclick', '#listaNotizie li a', function(){  
     idNotizia = $(this).attr('idNotizia');
     $.mobile.changePage("#details-page", { transition: "slide", changeHash: false });
-    
 });
 
 //Get per la chiamata del servizio "dettaglio"
@@ -79,7 +77,6 @@ $(document).on("pagebeforeshow", "#details-page", function () {
 		       output += "<p>" + data.body +"</p>"
 		       output += "<p> Data dipubblicazione: " +  DataDaJson(data.publishDate) + "</p>"
 		       output += "<a href=" + data.link +">Fonte</a>"
-		       
 		   }
 	       $("#dettaglio").html(output);
 	    },
