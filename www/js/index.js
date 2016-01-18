@@ -17,11 +17,13 @@
  * under the License.
  */
 
+// Get per la chiamata del serivzio "lista"
 $(document).on("pageinit", "#list-page", function () {
 	$.ajax({
 		type: "GET",
 		url: "https://nsoci-hiring.azure-mobile.net/api/news",
 		dataType: 'json',
+		//autenticazione
 		beforeSend: function (request){
 		    request.setRequestHeader("X-ZUMO-APPLICATION", "StSYducBChrIUOPMmwwNYfgsqUYPhv11");
 			request.setRequestHeader("Content-Type", "application/json");
@@ -38,27 +40,30 @@ $(document).on("pageinit", "#list-page", function () {
 	       
 	    },
 	    error: function (jqXHR, textStatus, errorThrown){
-	        alert(JSON.stringify(jqXHR));
-	        console.log(JSON.stringify(jqXHR));
-	        console.log(JSON.stringify(textStatus));
+	        var output = "<h2> Attenzione si &eacute; verificato un errore</h2>";
+	        output += "<p>" +JSON.stringify(textStatus) + "</p>";
 	        console.log(JSON.stringify(errorThrown));
+	        $('#listaNotizie').html(output).listview("refresh");
 	    }
 	});
 });
 
 var idNotizia;
 
+//Eventi click sulla notizia, apro il dettaglio
 $(document).on('vclick', '#listaNotizie li a', function(){  
     idNotizia = $(this).attr('idNotizia');
     $.mobile.changePage("#details-page", { transition: "slide", changeHash: false });
     
 });
 
+//Get per la chiamata del servizio "dettaglio"
 $(document).on("pagebeforeshow", "#details-page", function () {
    $.ajax({
 		type: "GET",
 		url: "https://nsoci-hiring.azure-mobile.net/api/news?id=" + idNotizia,
 		dataType: 'json',
+		//autenticazione
 		beforeSend: function (request){
 		    request.setRequestHeader("X-ZUMO-APPLICATION", "StSYducBChrIUOPMmwwNYfgsqUYPhv11");
 			request.setRequestHeader("Content-Type", "application/json");
@@ -72,39 +77,39 @@ $(document).on("pagebeforeshow", "#details-page", function () {
 		       var output = "<h2>" + data.title +"</h2>"
 		       output += "<img src=" + data.image + ">"
 		       output += "<p>" + data.body +"</p>"
-		       output += "<a link=" + data.url +">Fonte</a>"
-		       output += "<p> Data pubblicazione: " +  DataDaJson(data.publishDate) + "</p>"
-			   
+		       output += "<p> Data dipubblicazione: " +  DataDaJson(data.publishDate) + "</p>"
+		       output += "<a href=" + data.link +">Fonte</a>"
+		       
 		   }
 	       $("#dettaglio").html(output);
 	    },
 	    error: function (jqXHR, textStatus, errorThrown){
-	        alert(JSON.stringify(jqXHR));
-	        console.log(JSON.stringify(jqXHR));
-	        console.log(JSON.stringify(textStatus));
+	        var output = "<h2>Attenzione si &eacute; verificato un errore</h2>";
+	        output += "<p>" +JSON.stringify(textStatus) + "</p>";
 	        console.log(JSON.stringify(errorThrown));
+	        $('#listaNotizie').html(output).listview("refresh");
+	        $("#dettaglio").html(output);
 	    }
-	    
-	    
 	});
-    
 });
 
+//evento click pulsante indietro
+$(document).on('vclick', '#bottoneIndietro', function(){ 
+    $.mobile.changePage("#list-page", { transition: "slide", changeHash: false }); 
+});
+
+
+//ritorna data gg/mm/aaaa
 function DataDaJson(data) {
 	var giorno = new  Date(data).getDay();
 	var mese = new Date(data).getMonth();
 	var anno = new Date(data).getFullYear();
-	return  giorno + "/" + mese + "/" +  anno
-	
+	return  giorno + "/" + mese + "/" +  anno	
 }
 
-$(document).on('vclick', '#bottoneIndietro', function(){  
-   
-    $.mobile.changePage("#list-page", { transition: "slide", changeHash: false });
-    
-});
 
 
+//*****************************************************************************
 
 		
 var app = {
@@ -128,12 +133,12 @@ var app = {
     },
     // Update DOM on a Received Event
     receivedEvent: function(id) {
-        var parentElement = document.getElementById(id);
+        //var parentElement = document.getElementById(id);
         //var listeningElement = parentElement.querySelector('.listening');
-        var receivedElement = parentElement.querySelector('.received');
+        //var receivedElement = parentElement.querySelector('.received');
 
-        listeningElement.setAttribute('style', 'display:none;');
-        receivedElement.setAttribute('style', 'display:block;');
+        //listeningElement.setAttribute('style', 'display:none;');
+        //receivedElement.setAttribute('style', 'display:block;');
 
         
     }
